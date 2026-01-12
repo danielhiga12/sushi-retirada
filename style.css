@@ -11,9 +11,10 @@ th{background-color:#f2f2f2;}
 @media(max-width:600px){input,button{width:100%;box-sizing:border-box;}table,th,td{font-size:0.9rem;}}
 
 /* Cards do cardápio */
-#cardsContainer{display:flex;flex-wrap:wrap;justify-content:center;}
-.card{border:1px solid #ddd;border-radius:5px;margin:5px;padding:10px;width:150px;text-align:center;background:#fefefe;box-shadow:0 0 5px rgba(0,0,0,0.1);}
+.cards-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:180px;gap:10px;margin-top:10px;}
+.card{border:1px solid #ddd;border-radius:5px;padding:10px;text-align:center;background:#fefefe;display:flex;flex-direction:column;justify-content:space-between;position:relative;}
 .card button{width:100%;margin-top:5px;}
+.card .excluir{position:absolute;top:5px;right:5px;background:#f44336;color:white;padding:2px 6px;border-radius:4px;font-size:0.8rem;}
 
 /* Modal */
 .modal{display:none;position:fixed;z-index:1;padding-top:100px;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.4);}
