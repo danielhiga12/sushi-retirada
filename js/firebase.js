@@ -3,9 +3,9 @@
 
 <script>
 firebase.initializeApp({
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_DOMINIO",
-  projectId: "SEU_PROJECT_ID"
+  apiKey: "AIzaSyBEo_nParY7NiWMSjxWzXSC25Q3gzwh5qs",
+  authDomain: "retirada-delivery.firebaseapp.com",
+  projectId: "retirada-delivery"
 });
 
 const db = firebase.firestore();
