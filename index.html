@@ -1,30 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title>Retirada</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirada Delivery</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="container">
+        <h1>Retirada Delivery</h1>
 
-<header>🍣 PEDIDOS PARA RETIRADA</header>
+        <div class="adicionar-produto">
+            <h2>Adicionar Produto</h2>
+            <input type="text" id="nomeProduto" placeholder="Nome do Produto">
+            <input type="number" id="quantidadeProduto" placeholder="Quantidade" min="1">
+            <input type="number" id="valorProduto" placeholder="Valor (R$)" min="0" step="0.01">
+            <button onclick="adicionarProduto()">Adicionar</button>
+        </div>
 
-<button id="adminBtn" onclick="abrirAdmin()">Admin</button>
-<button id="cartBtn" onclick="finalizar()">Carrinho</button>
+        <div class="produtos-adicionados">
+            <h2>Produtos Adicionados</h2>
+            <table id="tabelaProdutos">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Valor Unitário</th>
+                        <th>Subtotal</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-<div class="produtos" id="lista"></div>
+        <div class="finalizar">
+            <input type="text" id="nomeCliente" placeholder="Nome do Cliente">
+            <button onclick="finalizarPedido()">Finalizar Pedido</button>
+        </div>
+    </div>
 
-<div class="modal" id="aviso">
-  <div class="box">
-    <b>AVISO ⚠️</b><br><br>
-    PEDIDOS FEITOS NO SITE SÃO SOMENTE PARA RETIRADA NA LOJA.<br>
-    NÃO REALIZAMOS ENTREGAS PRÓPRIAS.
-    <br><br>
-    <button onclick="aceitar()">OK</button>
-  </div>
-</div>
-
-<script src="js/firebase.js"></script>
-<script src="js/cliente.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
