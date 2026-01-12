@@ -1,80 +1,48 @@
-let carrinho = [];
-let total = 0;
-let avisoScroll = false;
+let carrinho=[];
 
-async function carregarProdutos(){
-  const { data } = await supabase
-    .from("produtos")
-    .select("*")
-    .eq("disponivel", true);
-
-  const lista = document.getElementById("listaProdutos");
-  lista.innerHTML = "";
-
-  data.forEach(p=>{
-    lista.innerHTML += `
+db.collection("produtos")
+.where("disponivel","==",true)
+.onSnapshot(snap=>{
+  lista.innerHTML="";
+  snap.forEach(doc=>{
+    const p=doc.data();
+    lista.innerHTML+=`
       <div class="produto">
         <img src="${p.imagem}">
-        <h4>${p.nome}</h4>
-        <p>R$ ${p.preco.toFixed(2)}</p>
-        <button onclick="addCarrinho('${p.id}', '${p.nome}', ${p.preco})">
-          Adicionar
-        </button>
-      </div>
-    `;
+        <b>${p.nome}</b><br>
+        R$ ${p.preco.toFixed(2)}<br>
+        <button onclick="add('${p.nome}',${p.preco})">Adicionar</button>
+      </div>`;
   });
+});
+
+function add(nome,preco){
+  carrinho.push({nome,preco});
 }
 
-function addCarrinho(id, nome, preco){
-  carrinho.push({ id, nome, preco });
-  total += preco;
-  document.getElementById("total").innerText = total.toFixed(2);
-}
+function finalizar(){
+  if(!carrinho.length) return alert("Carrinho vazio");
+  const nome=prompt("Seu nome:");
+  const tel=prompt("Telefone com DDD:");
+  if(!nome||!tel) return;
 
-async function finalizar(){
-  const nome = prompt("Nome:");
-  const telefone = prompt("Telefone com DDD:");
+  const total=carrinho.reduce((s,i)=>s+i.preco,0);
 
-  await supabase.from("pedidos").insert([{
-    nome_cliente: nome,
-    telefone,
-    itens: carrinho,
-    total
-  }]);
+  db.collection("pedidos").add({
+    nome,telefone:tel,itens:carrinho,total,
+    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
 
   alert("Pedido enviado!");
-  carrinho = [];
-  total = 0;
-  document.getElementById("total").innerText = "0.00";
+  carrinho=[];
 }
+
+function aceitar(){ aviso.style.display="none"; }
 
 function abrirAdmin(){
-  const senha = prompt("Senha do admin:");
-  if(senha === "hayama2012"){
-    localStorage.setItem("admin", "ok");
-    window.location.href = "admin.html";
-  } else {
-    alert("Senha incorreta");
+  const s=prompt("Senha:");
+  if(s==="hayama2012"){
+    localStorage.setItem("admin","ok");
+    location.href="admin.html";
   }
 }
-
-function verificarAviso(){
-  const box = document.getElementById("avisoTexto");
-  if (box.scrollTop + box.clientHeight >= box.scrollHeight - 5) {
-    avisoScroll = true;
-  }
-  if (avisoScroll && document.getElementById("checkAviso").checked) {
-    document.getElementById("btnAviso").disabled = false;
-  }
-}
-
-function aceitarAviso(){
-  localStorage.setItem("aviso", "ok");
-  document.getElementById("avisoFundo").style.display = "none";
-}
-
-if (localStorage.getItem("aviso") === "ok") {
-  document.getElementById("avisoFundo").style.display = "none";
-}
-
-carregarProdutos();
