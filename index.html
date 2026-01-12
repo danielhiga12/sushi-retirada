@@ -1,43 +1,30 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Pedido Retirada</title>
+<title>Retirada</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header>
-  <h2>🍣 Sushi - Retirada</h2>
-</header>
+<header>🍣 PEDIDOS PARA RETIRADA</header>
 
-<button id="btnAdmin" onclick="abrirAdmin()">⚙️ Admin</button>
+<button id="adminBtn" onclick="abrirAdmin()">Admin</button>
+<button id="cartBtn" onclick="finalizar()">Carrinho</button>
 
-<div class="produtos" id="listaProdutos"></div>
+<div class="produtos" id="lista"></div>
 
-<div class="carrinho">
-  <p>Total: R$ <span id="total">0.00</span></p>
-  <button onclick="finalizar()">Finalizar Pedido</button>
-</div>
-
-<!-- AVISO -->
-<div id="avisoFundo">
-  <div id="avisoBox">
-    <h3>⚠️ AVISO IMPORTANTE</h3>
-    <div id="avisoTexto" onscroll="verificarAviso()">
-      <p>Todos os pedidos são exclusivamente para <b>RETIRADA NA LOJA</b>.</p>
-      <p>Não realizamos entregas.</p>
-      <p>Ao continuar você concorda com isso.</p>
-    </div>
-    <label class="checkboxAviso">
-      <input type="checkbox" id="checkAviso" onchange="verificarAviso()">
-      Li e concordo
-    </label>
-    <button id="btnAviso" disabled onclick="aceitarAviso()">OK, ENTENDI</button>
+<div class="modal" id="aviso">
+  <div class="box">
+    <b>AVISO ⚠️</b><br><br>
+    PEDIDOS FEITOS NO SITE SÃO SOMENTE PARA RETIRADA NA LOJA.<br>
+    NÃO REALIZAMOS ENTREGAS PRÓPRIAS.
+    <br><br>
+    <button onclick="aceitar()">OK</button>
   </div>
 </div>
 
-<script src="js/supabase.js"></script>
-<script src="js/script.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/cliente.js"></script>
 </body>
 </html>
