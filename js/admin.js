@@ -1,56 +1,50 @@
-// PROTEÇÃO DO ADMIN
-if(localStorage.getItem("admin") !== "ok"){
-  alert("Acesso restrito");
-  window.location.href = "index.html";
+if(localStorage.getItem("admin")!=="ok"){
+  location.href="index.html";
 }
 
-function sairAdmin(){
-  localStorage.removeItem("admin");
-  window.location.href = "index.html";
+async function salvar(){
+  const file = uploadcare.Widget('[role=uploadcare-uploader]').value();
+  if(!file) return alert("Selecione uma imagem!");
+
+  const info = await file.promise();
+  const url = info.cdnUrl;
+
+  await db.collection("produtos").add({
+    nome: nome.value,
+    preco: +preco.value,
+    imagem: url,
+    disponivel: disp.value === "true"
+  });
+
+  alert("Produto salvo!");
 }
 
-async function cadastrar(){
-  const nome = document.getElementById("nome").value;
-  const preco = Number(document.getElementById("preco").value);
-  const file = document.getElementById("imagem").files[0];
-  const disponivel = document.getElementById("disp").value === "true";
-
-  const fileName = Date.now() + "-" + file.name;
-  await supabase.storage.from("produtos").upload(fileName, file);
-
-  const { data } = supabase.storage
-    .from("produtos")
-    .getPublicUrl(fileName);
-
-  await supabase.from("produtos").insert([{
-    nome,
-    preco,
-    imagem: data.publicUrl,
-    disponivel
-  }]);
-
-  alert("Produto cadastrado!");
-}
-
-async function carregarPedidos(){
-  const { data } = await supabase
-    .from("pedidos")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  const lista = document.getElementById("listaPedidos");
-  lista.innerHTML = "";
-
-  data.forEach(p=>{
-    lista.innerHTML += `
-      <div class="pedido">
-        <b>${p.nome_cliente}</b><br>
-        ${p.telefone}<br>
-        Total: R$ ${p.total.toFixed(2)}
-        <button onclick="window.print()">Imprimir</button>
+db.collection("pedidos").onSnapshot(snap=>{
+  pedidos.innerHTML="";
+  snap.forEach(doc=>{
+    const p = doc.data();
+    pedidos.innerHTML += `
+      <div onclick='imprimir(${JSON.stringify(p)})'>
+        ${p.nome} - R$ ${p.total.toFixed(2)}
       </div>
     `;
   });
-}
+});
 
-carregarPedidos();
+function imprimir(p){
+  let html=`
+  <div id="recibo">
+    <center><b style="font-size:24px">RETIRADA</b></center><br>
+    Nome: ${p.nome}<br>
+    Telefone: ${p.telefone}<br><br>
+  `;
+  p.itens.forEach(i=>{
+    html += `1 ${i.nome} ${i.preco.toFixed(2)}<br>`;
+  });
+  html += `
+    <br>TOTAL: ${p.total.toFixed(2)}<br><br>
+    Obrigado pela preferência
+  </div>`;
+  document.body.innerHTML = html;
+  window.print();
+}
