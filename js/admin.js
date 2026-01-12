@@ -1,3 +1,14 @@
+// PROTEÇÃO DO ADMIN
+if(localStorage.getItem("admin") !== "ok"){
+  alert("Acesso restrito");
+  window.location.href = "index.html";
+}
+
+function sairAdmin(){
+  localStorage.removeItem("admin");
+  window.location.href = "index.html";
+}
+
 async function cadastrar(){
   const nome = document.getElementById("nome").value;
   const preco = Number(document.getElementById("preco").value);
@@ -7,7 +18,9 @@ async function cadastrar(){
   const fileName = Date.now() + "-" + file.name;
   await supabase.storage.from("produtos").upload(fileName, file);
 
-  const { data } = supabase.storage.from("produtos").getPublicUrl(fileName);
+  const { data } = supabase.storage
+    .from("produtos")
+    .getPublicUrl(fileName);
 
   await supabase.from("produtos").insert([{
     nome,
@@ -41,4 +54,3 @@ async function carregarPedidos(){
 }
 
 carregarPedidos();
-
