@@ -1,33 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Admin</title>
 <link rel="stylesheet" href="css/style.css">
+<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
 </head>
 <body>
 
-<header>
-  <h2>🔐 Painel Admin</h2>
-</header>
+<header>PAINEL ADMIN</header>
 
-<div class="admin">
-  <button onclick="sairAdmin()">Sair</button>
+<input id="nome" placeholder="Nome do produto"><br>
+<input id="preco" type="number" placeholder="Preço"><br>
+<input type="hidden" role="uploadcare-uploader" data-public-key="SUA_PUBLIC_KEY" id="img"><br>
+<select id="disp">
+  <option value="true">Disponível</option>
+  <option value="false">Indisponível</option>
+</select><br>
+<button onclick="salvar()">Salvar Produto</button>
 
-  <input id="nome" placeholder="Nome do produto">
-  <input id="preco" type="number" placeholder="Preço">
-  <input id="imagem" type="file">
-  <select id="disp">
-    <option value="true">Disponível</option>
-    <option value="false">Indisponível</option>
-  </select>
-  <button onclick="cadastrar()">Cadastrar Produto</button>
+<h3>Pedidos</h3>
+<div id="pedidos"></div>
 
-  <h3>📦 Pedidos</h3>
-  <div id="listaPedidos"></div>
-</div>
-
-<script src="js/supabase.js"></script>
+<script src="js/firebase.js"></script>
 <script src="js/admin.js"></script>
 </body>
 </html>
