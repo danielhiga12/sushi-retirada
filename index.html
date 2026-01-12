@@ -10,25 +10,17 @@
 <div class="container">
     <h1>Retirada Delivery</h1>
 
-    <!-- CARDÁPIO -->
+    <!-- CARDÁPIO EM CARDS -->
     <div class="cardapio">
         <h2>Cardápio</h2>
-        <input type="text" id="pesquisarCardapio" placeholder="Pesquisar produto..." onkeyup="pesquisarCardapio()">
-        <table id="tabelaCardapio">
-            <thead>
-                <tr>
-                    <th>Produto</th>
-                    <th>Valor Unitário</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <button onclick="abrirAdicionarProduto()">Adicionar Item ao Cardápio</button>
+        <input type="text" id="pesquisarCardapio" placeholder="Pesquisar produto..." onkeyup="filtrarCardapio()">
+        <div id="cardsContainer"></div>
+        <div class="paginacao" id="paginacao"></div>
+        <button onclick="abrirAdicionarProduto()">Adicionar Produto ao Cardápio</button>
     </div>
 
-    <!-- ADICIONAR PRODUTO AO CARDÁPIO -->
-    <div id="adicionarProdutoCardapio" class="modal">
+    <!-- MODAL ADICIONAR PRODUTO -->
+    <div id="modalAdicionarProduto" class="modal">
         <div class="modal-content">
             <span class="close" onclick="fecharAdicionarProduto()">&times;</span>
             <h2>Adicionar Produto ao Cardápio</h2>
@@ -41,12 +33,12 @@
     <!-- RETIRADA -->
     <div class="retirada">
         <h2>Retirada</h2>
-        <input type="text" id="pesquisarRetirada" placeholder="Pesquisar produto..." onkeyup="pesquisarRetirada()">
+        <input type="text" id="pesquisarRetirada" placeholder="Pesquisar produto..." onkeyup="filtrarRetirada()">
         <table id="tabelaRetirada">
             <thead>
                 <tr>
                     <th>Produto</th>
-                    <th>Quantidade</th>
+                    <th>Qtd</th>
                     <th>Valor Unitário</th>
                     <th>Subtotal</th>
                     <th>Ações</th>
@@ -54,7 +46,6 @@
             </thead>
             <tbody></tbody>
         </table>
-
         <div class="finalizar">
             <input type="text" id="nomeCliente" placeholder="Nome do Cliente">
             <button onclick="imprimirNFCE()">Imprimir NFC-e</button>
@@ -62,6 +53,7 @@
     </div>
 
 </div>
+
 <script src="app.js"></script>
 </body>
 </html>
