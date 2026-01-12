@@ -17,7 +17,9 @@ async function carregarProdutos(){
         <img src="${p.imagem}">
         <h4>${p.nome}</h4>
         <p>R$ ${p.preco.toFixed(2)}</p>
-        <button onclick="addCarrinho('${p.id}', '${p.nome}', ${p.preco})">Adicionar</button>
+        <button onclick="addCarrinho('${p.id}', '${p.nome}', ${p.preco})">
+          Adicionar
+        </button>
       </div>
     `;
   });
@@ -46,6 +48,16 @@ async function finalizar(){
   document.getElementById("total").innerText = "0.00";
 }
 
+function abrirAdmin(){
+  const senha = prompt("Senha do admin:");
+  if(senha === "hayama2012"){
+    localStorage.setItem("admin", "ok");
+    window.location.href = "admin.html";
+  } else {
+    alert("Senha incorreta");
+  }
+}
+
 function verificarAviso(){
   const box = document.getElementById("avisoTexto");
   if (box.scrollTop + box.clientHeight >= box.scrollHeight - 5) {
@@ -66,4 +78,3 @@ if (localStorage.getItem("aviso") === "ok") {
 }
 
 carregarProdutos();
-
