@@ -1,158 +1,41 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sushi Retirada</title>
-
-<style>
-* { box-sizing: border-box; font-family: Arial, sans-serif; }
-body { margin:0; background:#f2f2f2; padding-bottom:120px; }
-header { background:#000; color:#fff; text-align:center; padding:15px; font-size:20px; }
-.container { padding:15px; }
-input, button {
-  width:100%; padding:14px; font-size:16px;
-  margin-bottom:10px; border-radius:8px;
-}
-button { background:#000; color:#fff; border:none; }
-.produto {
-  background:#fff; border-radius:10px; padding:15px;
-  margin-bottom:12px; display:flex; justify-content:space-between;
-}
-.carrinho {
-  position:fixed; bottom:0; width:100%;
-  background:#fff; padding:15px; border-top:2px solid #000;
-}
-#recibo {
-  display:none; width:280px; margin:auto;
-  background:#fff; padding:10px; font-size:14px;
-}
-.linha { border-top:1px dashed #000; margin:8px 0; }
-@media print {
-  body * { visibility:hidden; }
-  #recibo, #recibo * { visibility:visible; }
-  #recibo { position:absolute; left:0; top:0; }
-}
-#admin, #loginAdmin { display:none; }
-.admin-box { background:#fff; padding:15px; border-radius:10px; margin-bottom:15px; }
-</style>
+<title>Pedido Retirada</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-<header>🍣 Sushi - Retirada</header>
+<header>
+  <h2>🍣 Sushi - Retirada</h2>
+</header>
 
-<div class="container" id="cliente">
-  <input id="nomeCliente" placeholder="Nome do cliente">
-  <div id="listaProdutos"></div>
-</div>
+<div class="produtos" id="listaProdutos"></div>
 
 <div class="carrinho">
-  <button onclick="finalizar()">Finalizar & Imprimir</button>
-  <button onclick="abrirLogin()">Admin</button>
+  <p>Total: R$ <span id="total">0.00</span></p>
+  <button onclick="finalizar()">Finalizar Pedido</button>
 </div>
 
-<div id="recibo">
-  <center><strong>SUSHI DELIVERY</strong></center>
-  <center>RETIRADA NO BALCÃO</center>
-  <div class="linha"></div>
-  <div id="dadosRecibo"></div>
-  <div class="linha"></div>
-  <center>Obrigado pela preferência</center>
-</div>
-
-<div class="container" id="loginAdmin">
-  <div class="admin-box">
-    <h3>Login Admin</h3>
-    <input id="senhaAdmin" type="password" placeholder="Senha">
-    <button onclick="logarAdmin()">Entrar</button>
-    <button onclick="voltar()">Cancelar</button>
+<!-- AVISO -->
+<div id="avisoFundo">
+  <div id="avisoBox">
+    <h3>⚠️ AVISO IMPORTANTE</h3>
+    <div id="avisoTexto" onscroll="verificarAviso()">
+      <p>Todos os pedidos são exclusivamente para <b>RETIRADA NA LOJA</b>.</p>
+      <p>Não realizamos entregas.</p>
+      <p>Ao continuar você concorda com isso.</p>
+    </div>
+    <label class="checkboxAviso">
+      <input type="checkbox" id="checkAviso" onchange="verificarAviso()">
+      Li e concordo
+    </label>
+    <button id="btnAviso" disabled onclick="aceitarAviso()">OK, ENTENDI</button>
   </div>
 </div>
 
-<div class="container" id="admin">
-  <div class="admin-box">
-    <h3>Cadastrar Produto</h3>
-    <input id="prodNome" placeholder="Nome do produto">
-    <input id="prodPreco" type="number" placeholder="Preço">
-    <button onclick="addProduto()">Salvar</button>
-  </div>
-
-  <div class="admin-box">
-    <h3>Produtos</h3>
-    <div id="adminProdutos"></div>
-  </div>
-
-  <button onclick="sairAdmin()">Sair</button>
-</div>
-
-<script>
-const SENHA_ADMIN = "hayama2012";
-
-let produtos = JSON.parse(localStorage.getItem("produtos")) || [
-  { nome:"Combo 20 peças", preco:45 },
-  { nome:"Temaki Salmão", preco:22 },
-  { nome:"Hot Roll", preco:28 }
-];
-
-let carrinho = [];
-
-function carregarProdutos() {
-  let html="";
-  produtos.forEach((p,i)=>{
-    html+=`<div class="produto">
-      <span>${p.nome}<br>R$ ${p.preco.toFixed(2)}</span>
-      <button onclick="addCarrinho(${i})">Adicionar</button>
-    </div>`;
-  });
-  listaProdutos.innerHTML = html;
-}
-carregarProdutos();
-
-function addCarrinho(i){ carrinho.push(produtos[i]); alert("Adicionado"); }
-function pedidoID(){ return Math.floor(1000+Math.random()*9000); }
-
-function finalizar(){
-  const nome = nomeCliente.value;
-  if(!nome || carrinho.length===0){ alert("Preencha tudo"); return; }
-  let total=0;
-  let html=`Pedido: ${pedidoID()}<br>Cliente: ${nome}<br>${new Date().toLocaleString()}<br><div class="linha"></div>`;
-  carrinho.forEach(i=>{ total+=i.preco; html+=`${i.nome} - R$ ${i.preco.toFixed(2)}<br>`; });
-  html+=`<div class="linha"></div><strong>TOTAL: R$ ${total.toFixed(2)}</strong>`;
-  dadosRecibo.innerHTML = html;
-  recibo.style.display="block";
-  carrinho=[]; nomeCliente.value="";
-  setTimeout(()=>window.print(),400);
-}
-
-function abrirLogin(){ cliente.style.display="none"; loginAdmin.style.display="block"; }
-function voltar(){ loginAdmin.style.display="none"; cliente.style.display="block"; }
-function logarAdmin(){
-  if(senhaAdmin.value===SENHA_ADMIN){
-    loginAdmin.style.display="none";
-    admin.style.display="block";
-    carregarAdmin();
-  } else alert("Senha incorreta");
-}
-function sairAdmin(){ admin.style.display="none"; cliente.style.display="block"; }
-
-function addProduto(){
-  if(!prodNome.value||!prodPreco.value) return alert("Preencha");
-  produtos.push({nome:prodNome.value,preco:parseFloat(prodPreco.value)});
-  salvar(); carregarAdmin(); carregarProdutos();
-  prodNome.value=""; prodPreco.value="";
-}
-function removerProduto(i){
-  produtos.splice(i,1); salvar(); carregarAdmin(); carregarProdutos();
-}
-function carregarAdmin(){
-  adminProdutos.innerHTML = produtos.map((p,i)=>
-    `${p.nome} - R$ ${p.preco.toFixed(2)}
-    <button onclick="removerProduto(${i})">Excluir</button>`
-  ).join("<br>");
-}
-function salvar(){ localStorage.setItem("produtos",JSON.stringify(produtos)); }
-</script>
-
+<script src="js/supabase.js"></script>
+<script src="js/script.js"></script>
 </body>
 </html>
