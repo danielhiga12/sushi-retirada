@@ -11,6 +11,18 @@ header {
   text-align: center;
 }
 
+#btnAdmin {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  background: #444;
+  color: #fff;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  z-index: 999;
+}
+
 .produtos {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -103,4 +115,3 @@ input, select {
   gap: 6px;
   font-size: 14px;
 }
-
